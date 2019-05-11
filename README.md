@@ -90,3 +90,17 @@
 7. input 要有 value ,因为你每次输入的时候,都在刷新 input 这个原生组件
 
 8. 每一个 li 都有一个 key(从而实现数据更新)
+
+9. 利用 express 起一个基础的后台,因为 express 文件修改之后需要重启 node,所以利用nodemon 自动重启 server
+
+10. mongoose 的使用
+ 
+    connect 链接数据库
+    定义文档模型 Schema/model
+    一个数据库文档对应一个模型,通过模型操作数据库
+
+    mongoose 文档类型
+    String,Number 数据结构
+    增create 删remove 改update 查Find/findOne
+    
+    
