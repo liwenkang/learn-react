@@ -1,69 +1,21 @@
-import React, {Component} from 'react';
-import './App.css';
+import React from 'react';
 
-class Square extends Component {
+class App extends React.Component {
     render() {
+        const store = this.props.store;
+        const num = store.getState();
+        const addGUN = this.props.addGUN;
+        const addGUNAsync = this.props.addGUNAsync;
+        const removeGUN = this.props.removeGUN;
+        const removeGUNAsync = this.props.removeGUNAsync;
         return (
             <div>
-                <button className="square">
-                    {/* TODO */}
-                </button>
+                <h1>现在有机枪{num}把</h1>
+                <button onClick={() => store.dispatch(addGUN())}>增加一把</button>
+                <button onClick={() => store.dispatch(addGUNAsync())}>增加一把</button>
+                <button onClick={() => store.dispatch(removeGUN())}>减少一把</button>
+                <button onClick={() => store.dispatch(removeGUNAsync())}>减少一把</button>
             </div>
-        );
-    }
-}
-
-class Board extends Component {
-    renderSquare = (i) => {
-        return <Square/>;
-    }
-
-    render() {
-        const status = 'Next player: X';
-
-        return (
-            <div>
-                <div className="status">{status}</div>
-                <div className="board-row">
-                    {this.renderSquare(0)}
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
-                </div>
-            </div>
-        );
-    }
-}
-
-class Game extends Component {
-    render() {
-        return (
-            <div className="game">
-                <div className="game-board">
-                    <Board/>
-                </div>
-                <div className="game-info">
-                    <div>{/* status */}</div>
-                    <ol>{/* TODO */}</ol>
-                </div>
-            </div>
-        );
-    }
-}
-
-class App extends Component {
-    render() {
-        return (
-            <Game/>
         );
     }
 }

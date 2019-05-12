@@ -9,9 +9,11 @@
     "@svgr/webpack": "4.1.0",
     "@typescript-eslint/eslint-plugin": "1.6.0",
     "@typescript-eslint/parser": "1.6.0",
+    "antd-mobile": "^2.2.13",
     "babel-eslint": "10.0.1",
     "babel-jest": "^24.8.0",
     "babel-loader": "8.0.5",
+    "babel-plugin-import": "^1.11.0",
     "babel-plugin-named-asset-import": "^0.3.2",
     "babel-preset-react-app": "^9.0.0",
     "camelcase": "^5.2.0",
@@ -52,6 +54,7 @@
     "react-dev-utils": "^9.0.1",
     "react-dom": "^16.8.6",
     "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0",
     "resolve": "1.10.0",
     "sass-loader": "7.1.0",
     "semver": "6.0.0",
@@ -133,6 +136,15 @@
   "babel": {
     "presets": [
       "react-app"
+    ],
+    "plugins": [
+      [
+        "import",
+        {
+          "libraryName": "antd-mobile",
+          "style": "css"
+        }
+      ]
     ]
   }
 }

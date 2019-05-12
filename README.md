@@ -54,7 +54,7 @@
     props 是父组件向子组件传递数据的方式,组件不能修改自己的 props
     ```
 
-4. jsx 中的语法 className, 行内样式的语法
+4. jsx 中的语法 className, 行内样式的语法, 变量用{}包裹
     ```jsx harmony
     function App() {
       return (
@@ -63,9 +63,6 @@
         <div className="App">
           <header className="App-header">
             <img src={logo} className="App-logo" alt="logo" />
-            <p>
-              Edit <code>src/App.js</code> and save to reload.
-            </p>
             <a
               className="App-link"
               href="https://reactjs.org"
@@ -109,7 +106,44 @@
     
     mongoose 文档类型
     String,Number 数据结构
-    增create 删remove 改update 查Find/findOne
+    
+    增create
+    User.create({
+        user: '啦啦啦',
+        age: 22
+    }, function (err, doc) {
+        if (!err) {
+            console.log(doc);
+        } else {
+            console.log(err);
+        }
+    });
+    
+    删remove
+    const User = mongoose.model('user', new mongoose.Schema({
+        user: {type: String, required: true},
+        age: {type: Number, required: true}
+    }));
+    
+    User.remove({age: 18}, function (err, doc) {
+        console.log(doc)
+    })
+    
+    改update 
+    User.update({user: '小黄'}, {'$set': {age: 999}}, function (err, doc) {
+        console.log(doc)
+    })
+    
+    查Find/findOne
+    {}中可以定义具体条件
+    User.find({}, function (err, doc) {
+        return res.json(doc);
+    });
+        
+    查找一条数据就返回
+    User.findOne({}, function (err, doc) {
+        return res.json(doc);
+    });
     ```
     
 11. react 在使用的时候要重点关注模块的拆分. 对于复杂的组件推荐使用从下到上的构建方式(每次只关注一个小模块的实现), 对于简单的组件,可以从上往下实现
@@ -154,7 +188,7 @@
     // 所以对于页面数据的筛选,要在渲染之前完成
     ```
     
-15. props 传递的是正向数据流,高阶组件传递给低阶组件
+15. props 传递的是正向数据流,高阶组件(<组件 数据={值}/>)传递给低阶组件(从this.props获取)
     反向数据流: 低阶组件传递给高阶组件(需要首先在父组件中设置 setState 的方法, 然后传递给低阶组件,在低阶组件中调用高阶组件传来的方法,从而修改保存在高阶组件上的 state 的值)
     
 16. 注意 forEach 中不能用 break 和 continue, 使用 return,会提前结束当前这次循环,并进入下一次循环
@@ -198,7 +232,7 @@
         }
     }
     
-    // 在使用的时候 bind (这个写法不太推荐)
+    // 在使用的时候 bind 或者改为箭头函数
     class FilterableProductTable extends Component {
         constructor(props) {
             super(props);
@@ -218,6 +252,7 @@
            return (
                <div>
                    <button onClick={ this.handleFilterTextChange.bind(this, '赵四') }>Say Hello</button>
+                  <button onClick={ () => this.handleFilterTextChange('赵四') }>Say Hello</button>
                </div>
            )
        }
@@ -226,4 +261,106 @@
     
 18. 只要是是想依赖 react 的数组,就要设置 key
 
-19. 
+19. 如果组件中只有 render 可以把组件写成函数的形式,注意每一个组件都要引入 react
+    ```jsx harmony
+    function Child(props) {
+        return (
+            <div>
+                <h2>{props.name}</h2>
+            </div>
+        );
+    }
+    ```
+    
+20. JSX 的本质就是 JS, 变量需要 {}
+
+21. React 生命周期
+    ```
+    初始化周期:页面第一次渲染,所要执行的所有函数
+    
+    组件重新渲染生命周期: 属性变化,setState导致的页面状态变化
+    
+    组件卸载生命周期: 组件要离开某个页面了,被删掉,垃圾回收,状态清理
+    
+      constructor () {
+        先初始化
+      }  
+    
+      componentWillMount () {
+        将要开始渲染
+      }
+      
+      render () {
+        渲染
+      }  
+      
+      componentDidMount() {
+        组件已经被渲染到 DOM 中后运行
+      }
+    
+      componentWillUnmount() {
+        组件销毁前
+      } 
+    ```
+
+22. antd-mobile 按需引入,需要配合 babel (babel-plugin-import)
+
+23. redux 
+    ```
+    和 react 解耦
+    单一状态,单向数据流
+    核心概念: store, state, action(dispatch), reducer(类似 vuex 中的 getter,是一个处理变化,生成新的 state)
+    
+    使用步骤:
+        利用 reducer 新建 store,通过 store.getState 获取状态
+        // 新建 store
+        function counter(state = 0, action) {
+            switch (action.type) {
+                case '加机关枪':
+                    return state + 1;
+                case '减机关枪':
+                    return state - 1;
+                default:
+                    return 10;
+            }
+        }
+        
+        const store = createStore(counter);
+        const init = store.getState();
+        
+        需要状态变更, store.dispatch(action) 修改状态
+        store.dispatch({type: '加机关枪'});
+        
+        reducer 接收 state 和 action ,返回新的 state, 使用 store.subscribe 监听修改
+        function listener() {
+            const current = store.getState()
+            console.log(`现在的机关枪有${current}把`)
+        }
+        
+        store.subscribe(listener)
+        
+    如何跟 react 一起使用?
+        store.dispatch 方法传递给组件,从而让组件内部可以调用修改状态
+        subscribe 订阅 render 函数,意味着每次修改,都会进行重新渲染
+        redux 的相关内容单独存放
+        
+    具体步骤:
+        在 index.redux.js 中描述相关属性和方法
+        在 index.js 中新建一个 store, 将 store,以及一些方法 传给组件
+        将这个组件的 render 函数交给 store.subscribe
+        在组件中取出 store 和相关方法,从而实现调用
+        
+    处理异步?
+    redux 默认只处理同步,处理异步需要使用 redux-thunk
+    applyMiddleware 开启 thunk 中间件
+    redux 的 action 只能返回一个对象 {type: 'xxx'}
+    开启插件后 action 可以返回一个函数,使用 dispatch 提交 action
+    
+    调试工具? npm install redux-devtools-extention
+    
+    更优雅的结合 react 和 redux? react-redux
+    
+    4-5
+    ```
+
+   
