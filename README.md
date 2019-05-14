@@ -357,10 +357,76 @@
     开启插件后 action 可以返回一个函数,使用 dispatch 提交 action
     
     调试工具? npm install redux-devtools-extention
-    
-    更优雅的结合 react 和 redux? react-redux
-    
-    4-5
+    const reduxDevtools = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__();
+    const store = createStore(counter,
+        compose(
+            applyMiddleware(thunk),
+            reduxDevtools
+        )
+    );
     ```
-
+    
+24. react-redux 更优雅的结合 react 和 redux?
+    ```
+    Provider 在应用最外层,传入 store 即可,只用一次
+    Connect 负责从外部获取组件需要的参数, 可以用装饰器的方法写 (配合)
+    
+    // index.js
+    import {Provider} from 'react-redux'
+    ReactDom.render(
+        <Provider store={store}><App/></Provider>,
+        document.getElementById('root')
+    );
+    // App.js
+    import {connect} from 'react-redux';
+    import {addGUN, addGUNAsync, removeGUN, removeGUNAsync} from './index.redux';
+    // 将属性传入
+    const mapStateToProps = (state) => {
+        return {num: state};
+    };
+    // 将方法传入
+    const actionCreators = {addGUN, addGUNAsync, removeGUN, removeGUNAsync};
+    // 装饰器模式
+    App = connect(mapStateToProps, actionCreators)(App);
+    // 在安装 babel-plugin-transform-decorators-legacy 后, 配置 babel 的 plugins
+      [
+        "@babel/plugin-proposal-decorators",
+        {
+          "legacy": true
+        }
+      ],
+    // 下面的整个 connect 就相当于上面的一坨
+    @connect(
+        // 取 state 里的属性放到 props 里
+        state => ({num: state}),
+        // 取 state 里的方法放到 props 里, 自动 dispatch
+        {addGUN, addGUNAsync, removeGUN, removeGUNAsync},
+    ```
+    
+25. redux-route
+    ```
+    入门组件:
+            browserRouter, 包裹整个应用
+            Router 路由对应渲染的组件,可嵌套
+            Link 跳转
+            
+    ReactDom.render(
+        <Provider store={store}>
+            <BrowserRouter>
+                <div>
+                    <ul>
+                        <li><Link to="/">一</Link></li>
+                        <li><Link to='/2'>二</Link></li>
+                        <li><Link to='/3'>三</Link></li>
+                    </ul>
+                    {/* exact 表明完全匹配, 默认使用正则匹配 */}
+                    <Route path="/" exact component={App}/>
+                    <Route path="/2" component={App2}/>
+                    <Route path="/3" component={App3}/>
+                </div>
+            </BrowserRouter>
+        </Provider>,
+        document.getElementById('root')
+    );
+    ```
    
