@@ -15,7 +15,7 @@ import {addGUN, addGUNAsync, removeGUN, removeGUNAsync} from './index.redux';
 // 下面的整个 connect 就相当于上面的一坨
 @connect(
     // 取 state 里的属性放到 props 里
-    state => ({num: state}),
+    state => ({num: state.counter}),
     // 取 state 里的方法放到 props 里, 自动 dispatch
     {addGUN, addGUNAsync, removeGUN, removeGUNAsync},
 )

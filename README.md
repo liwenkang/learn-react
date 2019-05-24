@@ -170,8 +170,8 @@
         // 使用 new 调用 XX 的时候,会自动调用 constructor
         // todo 复习一下 new 的使用,以及原型链 
         constructor(props) {
-            // super(), 是用来初始化 this 的(子类没有自己的this对象, 而是继承父类的this对象)
-            // super(props), 用来初始化 this.props, 调用 React.Component 的 props
+            // super(), 是用来初始化 constructor 中的 this 的(子类没有自己的this对象, 而是继承父类的this对象)
+            // super(props), 用来初始化 constructor 中的 this.props, 调用 React.Component 的 props
             super(props);
             // 保存一份状态
             this.state = {
@@ -423,10 +423,61 @@
                     <Route path="/" exact component={App}/>
                     <Route path="/2" component={App2}/>
                     <Route path="/3" component={App3}/>
+                    {/* 在 Text 组件里面,就能从 props 中取到一个对象
+                        this.props = {
+                            history: {length: 13, action: "PUSH", location: {…}, createHref: ƒ, push: ƒ, …}
+                            location: {pathname: "/2", search: "", hash: "", state: undefined, key: "7da061"}
+                            match: {path: "/:location", url: "/2", isExact: true, params: {…}}
+                            staticContext: undefined
+                        }
+                        从而获取匹配的 url
+                        例如在多个用户/任务上作为标识
+                        {this.props.match.params.location} 告诉用户,他当前访问的错误的网址是什么!
+                    */}
+                    <Route path="/:location" component={Text}/>
                 </div>
             </BrowserRouter>
         </Provider>,
         document.getElementById('root')
     );
+    
+    Redirect 的用法?
+    
+    <Route path="/:location" component={Text}/> 之前的如果有已经命中的,那么我们希望 Text 组件是不渲染的, 这个时候就用到了 Switch (也可以用来做 404 之类的页面 ) 
+    
+    <Switch>
+        {/* Switch 表示只命中第一个 */}
+        <Route path="/" component={App}/>
+        <Route path="/2" component={App2}/>
+        <Route path="/3" component={App3}/>
+        <Route path="/:location" component={Test}/>
+    </Switch>
     ```
-   
+
+26. redux-route 小实战
+    做一个拥有登陆权限的页面
+    
+    Auth.js 登录相关 redux 的页面
+    Dasboard 是登陆的路由
+    
+    注意 App.js 中 16 行
+    ```jsx harmony
+    @connect(
+        // 取 state 里的属性放到 props 里,虽然 state 就是数字,但是要取 couter 才能取到正确的值
+        state => ({num: state.counter}),
+    )
+    ```
+    
+26. react-router 中 path 和 url 的区别?
+ 
+    path - (string) The path pattern used to match. 
+         - Useful for building nested <Route>s
+    url - (string) The matched portion of the URL. 
+        - Useful for building nested <Link>s
+        
+    观察路由"/users/:userId"
+    此例中，match.path的返回值将是 "/users/:userId"。
+    而match.url 的返回值将是:userId的值，例如"users/5"。
+    
+    
+    
