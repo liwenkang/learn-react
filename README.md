@@ -1,8 +1,5 @@
 # react 全家桶入门
 
-    使用 react 全家桶配合 ant-design 以及 typescript 开始一个模版
-
-
 1. 注释的使用
     ```jsx harmony
     class ProductCategoryRow extends React.Component {
