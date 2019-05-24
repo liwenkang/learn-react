@@ -21,6 +21,11 @@ User.update({user: '小黄'}, {'$set': {age: 999}}, function (err, doc) {
 app.get('/', function (req, res) {
     res.send('<h1>啦啦啦</h1>');
 });
+app.get('/user', function (req, res) {
+    return res.json({
+        user: '哈哈'
+    });
+});
 app.get('/data', function (req, res) {
     User.find({}, function (err, doc) {
         return res.json(doc);

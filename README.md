@@ -189,7 +189,9 @@
     ```
     
 15. props 传递的是正向数据流,高阶组件(<组件 数据={值}/>)传递给低阶组件(从this.props获取)
+    ```
     反向数据流: 低阶组件传递给高阶组件(需要首先在父组件中设置 setState 的方法, 然后传递给低阶组件,在低阶组件中调用高阶组件传来的方法,从而修改保存在高阶组件上的 state 的值)
+    ```
     
 16. 注意 forEach 中不能用 break 和 continue, 使用 return,会提前结束当前这次循环,并进入下一次循环
 
@@ -469,15 +471,42 @@
     ```
     
 26. react-router 中 path 和 url 的区别?
- 
+    ```
     path - (string) The path pattern used to match. 
          - Useful for building nested <Route>s
+         
     url - (string) The matched portion of the URL. 
         - Useful for building nested <Link>s
         
     观察路由"/users/:userId"
     此例中，match.path的返回值将是 "/users/:userId"。
     而match.url 的返回值将是:userId的值，例如"users/5"。
+    ```
     
+27. 异步请求
+    ```
+    同步写在 componentWillMount
+    异步写在 componentDidMount, 在 render 之后执行,永远只执行一次(组件再刷新之后不会重新执行)
+    注意,render 里的变量,要有初始值,之后才根据异步请求的结果刷新
     
+    将异步的请求写在 Auth.redux 文件中,在异步结果返回后,调用一个方法,规定好函数的 type 和 参数值, 最后在统一的一个大函数 auth 中集中处理,注意传入的参数通过 action.payload.user 拿到
+    ```
     
+28. axios 拦截器
+    ```
+    import axios from 'axios';
+    import {Toast} from 'antd-mobile';
+    // 拦截请求
+    axios.interceptors.request.use(function (config) {
+        Toast.loading('加载中', 0);
+        return config;
+    });
+    
+    // 拦截响应
+    axios.interceptors.response.use(function (config) {
+        setTimeout(() => {
+            Toast.hide();
+        }, 3000);
+        return config;
+    });
+    ```

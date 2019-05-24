@@ -8,6 +8,7 @@ import {BrowserRouter, Route, Redirect, Switch} from 'react-router-dom';
 import reducers from './reducer.js';
 import Auth from './Auth';
 import Dashboard from './Dashboard';
+import './axios.config'
 
 const reduxDevtools = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__();
 
