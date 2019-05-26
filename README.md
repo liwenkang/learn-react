@@ -195,7 +195,7 @@
 17. react 绑定 this 的方法
     ```jsx harmony
     // 参考 https://blog.csdn.net/sinat_17775997/article/details/56839485
-    // 官方示例中的绑定方式
+    // 官方示例中的绑定方式,传说中性能会更好??? 待求证 todo 
     class FilterableProductTable extends Component {
         constructor(props) {
             super(props);
@@ -454,7 +454,7 @@
     ```
 
 26. redux-route 小实战
-    做一个拥有登陆权限的页面
+    做一个拥有登陆权限的页面(代码放在 permissionExample 中)
     
     Auth.js 登录相关 redux 的页面
     Dasboard 是登陆的路由

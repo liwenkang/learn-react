@@ -20,7 +20,7 @@ function three() {
 class Dashboard extends React.Component {
     // constructor(props) {
     //     super(props);
-    //     // 在这里就可以获得 auth 和 logout
+    //     // 在这里就可以获得 authroute 和 logout
     //
     // }
 
